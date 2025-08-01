@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/badge/Rust-1.88.0-orange.svg" /></a>
 </p>
 
-**sysmon** is a Rust-based binary which collects system metrics (memory usage, CPU usage, network usage, sensors temperature) and writes them into InfluxDB (OSS v2) using InfluxDB HTTP API.
+**sysmon** is a Rust-based binary which collects system metrics (disks usage, networks usage, sensors temperature, system usage (memory usage, CPU usage)) and writes them into InfluxDB (OSS v2) using InfluxDB HTTP API.
 
 ## Supported & tested platforms
 
