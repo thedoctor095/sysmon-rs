@@ -20,7 +20,9 @@ fn main() {
     
     loop {
         let payload = monitor.gather_facts().lines.join("\n");
-        let _ = client.send(payload);
+        if let Some(value) = client.send(payload).err() {
+            eprintln!("{value:?}")
+        }
         std::thread::sleep(Duration::from_secs(client.dump_interval_seconds));
     }
 }

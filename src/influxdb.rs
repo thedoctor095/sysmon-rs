@@ -1,7 +1,7 @@
 use anyhow;
 use configparser::ini::Ini;
 use reqwest::header::{HeaderMap, ACCEPT, AUTHORIZATION, CONTENT_TYPE};
-use std::{env::home_dir};
+use std::{env::home_dir, time::Duration};
 use url::Url;
 
 const CTYPE: &str = "text/plain; charset=utf-8";
@@ -67,15 +67,21 @@ impl InfluxDB {
     }
 
     pub fn send(&mut self, payload: String) -> Result<(), anyhow::Error>{
-        let client = reqwest::blocking::Client::new();
+        let client = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(60))
+        .build()
+        .expect("Could not build HTTP client");
+
         if self.headers.is_empty() {
             self.build_headers();
         }
+
         let response = client
         .post(&self.influxdb_uri)
         .body(payload)
         .headers(self.headers.clone())
         .send()?;
+
         println!("[InfluxDB] <{} {}>", response.status(), response.url());
         Ok(())
     }
