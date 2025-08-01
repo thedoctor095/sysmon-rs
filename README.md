@@ -34,7 +34,27 @@ rustup target add aarch64-unknown-linux-gnu
 
 cargo install --git https://github.com/thedoctor095/sysmon-rs --target=aarch64-unknown-linux-gnu
 ```
+## Configuration
+**sysmon** expects to find a config file in the path `$HOME/.config/sysmon.ini` and will not initialize without it.
 
+The config file contents are listed below:
+```
+[sys-mon]
+# the interval at which the metrics are collected and dumped in the DB
+# collect & dump metrics each 60 minutes
+dump_interval_seconds = 3600
+
+[influxdb]
+# the bucket into which to write
+bucket=home
+# the organisation in which the bucket is found
+organisation=monitoring
+# the authorization token for writing to the DB API
+token=token
+# the URI where the metrics are sent
+uri=http://localhost:8086/api/v2/write
+
+```
 ## Example usage
 Note that **204 No Content** is the standard response status when writing to an InfluxDB endpoint.
 ```
