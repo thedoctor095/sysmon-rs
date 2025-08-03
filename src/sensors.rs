@@ -1,5 +1,5 @@
 use std::time::{ SystemTime, UNIX_EPOCH };
-use sysinfo::{Component, Components};
+use sysinfo::{ Component, Components };
 
 #[derive(Default, Debug)]
 pub struct SensorsData {
@@ -13,8 +13,8 @@ pub struct SensorsMonitor {
 
 impl SensorsMonitor {
     pub fn new() -> Self {
-        let disks = Components::new_with_refreshed_list();
-        SensorsMonitor { inner: disks }
+        let components = Components::new_with_refreshed_list();
+        SensorsMonitor { inner: components }
     }
 
     pub fn gather_facts(&mut self) -> SensorsData {

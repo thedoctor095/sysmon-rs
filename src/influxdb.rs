@@ -1,69 +1,32 @@
 use anyhow;
-use configparser::ini::Ini;
-use reqwest::header::{HeaderMap, ACCEPT, AUTHORIZATION, CONTENT_TYPE};
-use std::{env::home_dir, time::Duration};
+use reqwest::header::{ HeaderMap, ACCEPT, AUTHORIZATION, CONTENT_TYPE };
+use std::time::Duration;
 use url::Url;
 
 const CTYPE: &str = "text/plain; charset=utf-8";
 const ACC: &str = "application/json";
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct InfluxDB {
-    pub dump_interval_seconds: u64,
     headers: HeaderMap,
     influxdb_token: String,
     pub influxdb_uri: String
 }
 
 impl InfluxDB {
-    pub fn new() -> Self {
-        let mut config = Ini::new();
-
-        let config_path = home_dir()
-        .expect("Could not infer home dir path - failed to initialize")
-        .join(".config/sysmon.ini");
-
-        let _ = config
-        .load(config_path)
-        .expect("Could not load config path");
-    
-        // default to hourly dumps
-        let dump_interval = config
-        .getuint("sys-mon", "dump_interval_seconds")
-        .unwrap_or_else(|_| None)
-        .unwrap_or(3600);
-
-        let influxdb_bucket = config
-        .get("influxdb", "bucket")
-        .expect("InfluxDB bucket not found");
-
-        let influxdb_org = config
-        .get("influxdb", "organisation")
-        .expect("IncludDB organization not found");
-    
-        let influxdb_token = config
-        .get("influxdb", "token")
-        .expect("InfluxDB token not found");
-
-        let influxdb_uri = config
-        .get("influxdb", "uri")
-        .expect("InfluxDB URI not found");
-        
-        let mut url = Url::parse(&influxdb_uri)
+    pub fn build(mut self, bucket: &str, org: &str, token: &str, uri: &str) -> Self {
+        let mut url = Url::parse(uri)
         .expect("Invalid InfluxDB URI found");
 
         url
         .query_pairs_mut()
-        .append_pair("bucket", &influxdb_bucket)
-        .append_pair("org", &influxdb_org)
+        .append_pair("bucket", bucket)
+        .append_pair("org", org)
         .append_pair("precision", "ms");
-        
-        Self {
-            dump_interval_seconds: dump_interval,
-            influxdb_token: influxdb_token,
-            influxdb_uri: url.to_string(),
-            headers: HeaderMap::default()
-        }
+
+        self.influxdb_uri = url.to_string();
+        self.influxdb_token = token.to_string();
+        self
     }
 
     pub fn send(&mut self, payload: String) -> Result<(), anyhow::Error>{

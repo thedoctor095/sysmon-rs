@@ -1,6 +1,6 @@
 use anyhow;
 use std::time::{ SystemTime, UNIX_EPOCH };
-use sysinfo::{Disk, DiskUsage, Disks};
+use sysinfo::{ Disk, DiskUsage, Disks };
 
 #[derive(Default, Debug)]
 pub struct DisksData {

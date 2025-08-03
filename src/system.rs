@@ -1,4 +1,4 @@
-use anyhow::anyhow as manyhow;
+use anyhow::anyhow as ah;
 use chrono::{ DateTime, SecondsFormat, Utc };
 use std::time::{ SystemTime, UNIX_EPOCH };
 use sysinfo::{ MINIMUM_CPU_UPDATE_INTERVAL, System };
@@ -42,10 +42,10 @@ impl SystemMonitor {
     fn build_tags(&self) -> Result<String, anyhow::Error> {
         let current_unix = System::boot_time() as i64;
         let boot_time = DateTime::<Utc>::from_timestamp(current_unix, 0)
-        .ok_or_else(|| manyhow!("Could not convert unix boot_time to datetime"))?
+        .ok_or_else(|| ah!("Could not convert unix boot time to datetime"))?
         .to_rfc3339_opts(SecondsFormat::Secs, true);
         let host_name = System::host_name()
-        .ok_or_else(|| manyhow!("Could not retrieve hostname"))?;
+        .ok_or_else(|| ah!("Could not retrieve hostname"))?;
         let tags = format!(
             "boot_time={},host_name={}",
             boot_time, host_name
