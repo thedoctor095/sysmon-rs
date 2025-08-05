@@ -1,14 +1,10 @@
 mod config;
-mod disks;
-mod facts;
 mod influxdb;
-mod networks;
-mod sensors;
-mod system;
+mod monitors;
 
 use std::{ thread::sleep, time::Duration };
 
-use crate::{config::Config, influxdb::InfluxDB, facts::StatsMonitor};
+use crate::{config::Config, influxdb::InfluxDB, monitors::StatsMonitor};
 
 
 fn main() {
