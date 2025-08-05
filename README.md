@@ -35,6 +35,7 @@ rustup target add aarch64-unknown-linux-gnu
 cargo install --git https://github.com/thedoctor095/sysmon-rs --target=aarch64-unknown-linux-gnu
 ```
 ## Configuration
+### sysmon
 **sysmon** expects to find a config file in the path `$HOME/.config/sysmon.ini` and will not initialize without it.
 
 The config file contents are listed below:
@@ -54,8 +55,14 @@ token=token
 # the URI where the metrics are sent
 uri=http://localhost:8086/api/v2/write
 ```
-
 All metrics will be dumped using *milisecond* precision.
+
+### InfluxDB
+The `docker-compose.yaml` file serves as a ready-to-use template for launching and sending metrics to an InfluxDB service.
+
+Make sure to adjust the environment variables and volumes based on your needs.
+
+
 
 ## Example usage
 Note that **204 No Content** is the standard response status when writing to an InfluxDB endpoint.
