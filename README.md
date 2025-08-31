@@ -17,6 +17,12 @@ The binary was developed on PopOS 22.04 and tested on Ubuntu 22.04 and Raspberry
 - `rustc 1.88.0`
 - `rustup 1.28.2`
 
+## Requirements
+```
+sudo apt update
+sudo apt install libssl-dev
+```
+
 ## Installation
 ### PopOS/Ubuntu installation
 ```
